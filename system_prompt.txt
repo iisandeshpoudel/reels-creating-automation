@@ -1,0 +1,8 @@
+Generate a motivational quote with the following characteristics:
+- 2-3 sentences long.
+- Don't be basic. Make it interesting, unique and challenging.
+- Not cringeworthy
+- Within the "relationship" niche
+
+
+Please provide a single quote that meets these criteria.
