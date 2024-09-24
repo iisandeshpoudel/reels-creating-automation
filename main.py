@@ -2,9 +2,9 @@ import os
 import logging
 from datetime import datetime
 from dotenv import load_dotenv
-from elevenlabs import generate, play
 from quote_generator import generate_quote
 from error_handler import handle_error
+from tts_service import generate_audio
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -38,18 +38,12 @@ def save_quote_text(quote_folder, quote):
         file.write(quote)
     return file_path
 
-def text_to_speech(text):
-    load_dotenv()  # Load environment variables from .env file
-    api_key = os.getenv("v_api_key")
-    
-    audio = generate(
-        text=text,
-        api_key=api_key,
-        voice="Josh",  # You can change this to any available voice
-        model="eleven_monolingual_v1"
-    )
-    
-    play(audio)
+def text_to_speech(text, quote_folder):
+    # Save the audio file
+    audio_filename = "quote_audio.mp3"
+    audio_path = os.path.join(quote_folder, audio_filename)
+    generate_audio(text, audio_path)
+    return audio_path
 
 def main():
     # Load environment variables
@@ -80,15 +74,12 @@ def main():
 
         # Generate audio
         logging.debug("Attempting to generate audio...")
-        audio_path = text_to_speech(quote)
-        if audio_path:
-            logging.info(f"Generated audio file: {audio_path}")
-        else:
-            logging.error("Failed to generate audio file")
+        audio_path = text_to_speech(quote, quote_folder)
+        logging.info((f"Damn generate audio file:{audio_path}"))
 
         print(f"Quote: {quote}")
         print(f"Text file: {text_file_path}")
-        print(f"Audio file: {audio_path if audio_path else 'Not generated'}")
+        print(f"Audio file:{audio_path}")
 
     except Exception as e:
         handle_error(e)

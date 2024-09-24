@@ -1,22 +1,38 @@
 import os
-import logging
-from gtts import gTTS
+from elevenlabs import ElevenLabs, VoiceSettings
 from error_handler import handle_error
+from dotenv import load_dotenv
 
-def generate_audio(text, quote_folder):
+load_dotenv()
+api_key = os.getenv("v_api_key")
+print(f"your api key: {api_key}")
+client = ElevenLabs(api_key=api_key)
+
+def generate_audio(text, output_file):
+    print(f"your api key: {api_key}")
     try:
-        logging.debug("Initializing Text-to-Speech...")
-        tts = gTTS(text=text, lang='en', slow=False)
+        audio_generator = client.text_to_speech.convert(
+            voice_id="pMsXgVXv3BLzUgSXRplE",  # You can change this to your preferred voice ID
+            optimize_streaming_latency="0",
+            output_format="mp3_44100_128",  # Changed to match your previous settings
+            text=text,
+            voice_settings=VoiceSettings(
+                stability=0.1,
+                similarity_boost=0.3,
+                style=0.2,
+            ),
+        )
 
-        file_path = os.path.join(quote_folder, "quote.mp3")
-        logging.debug(f"Saving audio to {file_path}...")
-        
-        tts.save(file_path)
-
-        logging.info(f"Audio file saved successfully: {file_path}")
-        return file_path
+        # Save the audio to a file
+        with open(output_file, "wb") as file:
+            for chunk in audio_generator:
+                file.write(chunk)
+                
+        print(f"Audio written to the file {output_file}")
 
     except Exception as e:
-        logging.error(f"Error in generate_audio: {str(e)}")
-        handle_error(e)
-        return None
+        print(f"Sandesh yeta error ayo audio ko side ma: {str(e)}")
+
+# EXAMPLE::
+if __name__ == "__main__":
+    generate_audio("Samir happy birthday", "test.mp3")
