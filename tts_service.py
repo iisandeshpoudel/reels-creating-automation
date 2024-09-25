@@ -12,9 +12,9 @@ def generate_audio(text, output_file):
     print(f"your api key: {api_key}")
     try:
         audio_generator = client.text_to_speech.convert(
-            voice_id="pMsXgVXv3BLzUgSXRplE",  # You can change this to your preferred voice ID
+            voice_id="ErXwobaYiN019PkySvjV",  # You can change this to your preferred voice ID
             optimize_streaming_latency="0",
-            output_format="mp3_44100_128",  # Changed to match your previous settings
+            output_format="mp3_44100_128",
             text=text,
             voice_settings=VoiceSettings(
                 stability=0.1,
