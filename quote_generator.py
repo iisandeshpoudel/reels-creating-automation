@@ -106,4 +106,4 @@ def generate_random_quote():
         lesson3=random.choice(realizations)
     )
 
-# ... rest of the code remains unchanged ...
+# I should add a feature of retrieving prompt from a separate, jastai system_prompt.txt bata..... #todo 
